@@ -1,0 +1,9 @@
+Student ID: 230103296
+OS: Linux 6.18.44-fc-v153 (Linux-6.18.44-fc-v153-x86_64-with-glibc2.39)
+CPU: Intel(R) Xeon(R) Processor @ 2.10GHz
+Logical cores (os.cpu_count): 2
+Seed: 230103296
+Array size: 20000000 float64 elements
+Sum: 9999204.536702
+Standard deviation: 0.288699214
+Serial execution time: 222.72 ms
