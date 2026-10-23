@@ -1,0 +1,16 @@
+Student ID: 230103296
+OS: Linux-6.18.44-fc-v153-x86_64-with-glibc2.39
+CPU: Intel(R) Xeon(R) Processor @ 2.10GHz
+Logical cores: 2 | No GPU used -> CPU inter-process variant | Median of 7 runs
+Overhead = send -> child receives & checksums a sample -> acknowledgement (child already running)
+
+           N |  Size MB | A1 Pipe ms | A2 Queue ms | B1 SHM attach ms | B2 SHM create+copy ms |   A1 / B1
+---------------------------------------------------------------------------------------------------------
+     100,000 |      0.8 |      1.188 |       2.214 |            0.096 |                 0.564 |       12x
+   1,000,000 |      8.0 |     22.319 |      26.606 |            0.664 |                 7.748 |       34x
+  10,000,000 |     80.0 |    299.106 |     288.448 |            2.943 |                65.843 |      102x
+
+Effective throughput of Path A1 (Pipe): N=100,000: 0.67 GB/s, N=1,000,000: 0.36 GB/s, N=10,000,000: 0.27 GB/s
+Growth from N=100,000 to N=10,000,000 (100x more data): A1 Pipe 252x, A2 Queue 130x, B1 SHM attach 31x, B2 SHM create+copy 117x.
+B1 sends only the block name, so it scales far more slowly (what remains is the OS mapping and faulting in pages);
+B2 is the honest cost when the data starts in ordinary memory: one memcpy into the shared block, no pickling.
