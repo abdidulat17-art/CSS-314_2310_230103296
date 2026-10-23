@@ -1,0 +1,32 @@
+Student ID: 230103296
+OS: Linux 6.18.44-fc-v153 (amd64)
+Java: 21.0.12.1
+Logical cores: 2
+Threads: 4 | Increments per thread: 2000000 | Runs per variant: 7
+
+=== Unsynchronized counter (volatile int, counter++, no lock/atomic) ===
+  run 1: final = 3,926,845 | lost = 4,073,155 (50.91%) | 192.15 ms
+  run 2: final = 4,426,070 | lost = 3,573,930 (44.67%) | 145.21 ms
+  run 3: final = 3,463,996 | lost = 4,536,004 (56.70%) | 186.32 ms
+  run 4: final = 3,818,760 | lost = 4,181,240 (52.27%) | 170.82 ms
+  run 5: final = 3,839,469 | lost = 4,160,531 (52.01%) | 182.19 ms
+  run 6: final = 3,836,183 | lost = 4,163,817 (52.05%) | 88.66 ms
+  run 7: final = 3,985,876 | lost = 4,014,124 (50.18%) | 87.78 ms
+
+Expected final value:  8,000,000
+Actual final value:    3,839,469  (median run)
+Updates lost:          4,160,531 = 52.01%  (range over runs: 44.67% to 56.70%)
+
+=== Correct versions (always exactly 8,000,000) ===
+Variant                            |    Median ms |      Ratio | Change vs unsafe
+-----------------------------------+--------------+------------+------------------
+Unsafe (wrong result)              |       170.82 |      1.00x | -
+AtomicInteger.incrementAndGet      |       121.03 |      0.71x | -49.79 ms
+ReentrantLock                      |       201.61 |      1.18x | +30.79 ms
+
+Lock penalty (ReentrantLock vs unsynchronized): +30.79 ms (1.18x the unsynchronized time, +18.0%)
+Atomic (AtomicInteger) vs unsynchronized:         -49.79 ms (0.71x, -29.1%)
+Lock vs atomic:                                   +80.58 ms (1.67x)
+
+Note: the unsafe counter is 'volatile' (visibility only, NOT atomic), so every counter++
+is a real memory read, add and write that other threads can overwrite.
