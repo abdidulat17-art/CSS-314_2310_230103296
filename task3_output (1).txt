@@ -1,0 +1,15 @@
+Student ID: 230103296
+OS: Linux-6.18.44-fc-v153-x86_64-with-glibc2.39
+CPU: Intel(R) Xeon(R) Processor @ 2.10GHz
+Logical cores: 2 | Parallel workers (threads): 2
+Array: 2,000,000 int64 values in [1, 10], seed 230103296 | Median of 15 runs
+
+ Serial Time (ms) |  Parallel Time (ms) |  Speedup | Verification Status
+----------------------------------------------------------------------
+            6.196 |               5.688 |    1.09x | PASS
+
+parallel_output[-1] = 11,003,118 | serial_output[-1] = 11,003,118 | full array equal: True
+Reference: literal Python-loop serial scan = 214.1 ms (NumPy parallel is 38x faster than it, not a like-for-like comparison)
+
+Work: serial does N = 2,000,000 additions; the chunked scan does ~3N (chunk-sum pass, local scan, offset add over every element),
+so it is not work-efficient: it spends about 3x the operations to shorten the sequential chain per worker.
