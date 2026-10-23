@@ -1,0 +1,24 @@
+Student ID: 230103296
+OS: Linux-6.18.44-fc-v153-x86_64-with-glibc2.39
+CPU: Intel(R) Xeon(R) Processor @ 2.10GHz
+Logical cores (os.cpu_count): 2
+Array: 30,000,000 float64 = 240 MB per array; threads tested: [1, 2]
+Median of 5 runs; NumPy ufuncs/copies release the GIL, one contiguous chunk per thread
+
+Kernel A (copy, memory-bound)
+ Cores | Wall Time (ms) |  Speedup | Efficiency | Bandwidth (GB/s)
+------------------------------------------------------------------
+     1 |          35.41 |     1.00 |       1.00 |            13.55
+     2 |          27.84 |     1.27 |       0.64 |            17.24
+
+Kernel B (sin*cos+tan, compute-bound)
+ Cores | Wall Time (ms) |  Speedup | Efficiency
+-----------------------------------------------
+     1 |        1015.34 |     1.00 |       1.00
+     2 |         483.41 |     2.10 |       1.05
+
+=== Verdict ===
+Efficiency at 2 cores: Kernel A (copy) = 0.64 | Kernel B (sin*cos+tan) = 1.05
+Kernel A (vector copy) STALLED in scaling due to memory channel / RAM bandwidth saturation: efficiency 0.64 < 0.90, while compute-bound Kernel B kept efficiency 1.05.
+The copy does almost no arithmetic per byte moved, so extra cores just wait on the shared memory bus;
+the transcendental math in Kernel B keeps each core busy on its own, so it scales almost linearly.
