@@ -1,0 +1,12 @@
+Student ID: 230103296
+CPU: Intel(R) Xeon(R) Processor @ 2.10GHz
+Logical cores: 2 | Physical cores: 2 | Threads used: 2
+Increments per thread: 50000000 | Cache line: 64 bytes | Median of 5 runs
+
+Variant                            | Wall Time ms | Ratio vs Unpadded
+-----------------------------------+--------------+------------------
+Unpadded shared (false sharing)    |       143.62 |             1.00x
+Padded shared (64-byte slots)      |       119.24 |             1.20x
+Local variable, one final write    |        30.03 |             4.78x
+
+Execution ratio Unpadded / Padded: 1.20x slower with false sharing
