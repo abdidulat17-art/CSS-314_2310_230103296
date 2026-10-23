@@ -1,0 +1,8 @@
+d44ef3b - 2026-10-23 14:55:59 +0500 : feat: task 4 scheduling under skew
+4b7c679 - 2026-10-23 14:53:51 +0500 : feat: task 8 compute geometry
+71fa4c3 - 2026-10-23 14:51:46 +0500 : feat: task 7 memory bandwidth saturation
+2b26f07 - 2026-10-23 14:49:14 +0500 : feat: task 6 race condition forensics
+3543e87 - 2026-10-23 14:47:14 +0500 : feat: task 5 overhead crossover
+6d1f78b - 2026-10-23 14:43:23 +0500 : feat: task 3 false sharing profile
+842995f - 2026-10-23 14:41:14 +0500 : feat: task 2 amdahl scaling
+5908daf - 2026-10-23 14:38:20 +0500 : feat: task 1 baseline execution
